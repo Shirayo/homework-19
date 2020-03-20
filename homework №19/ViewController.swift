@@ -10,11 +10,31 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var lastUpdateLabel: UILabel!
+    @IBOutlet weak var usdCurrencyLabel: UILabel!
+    @IBOutlet weak var bynCurrencyLabel: UILabel!
+    @IBOutlet weak var rubCurrencyLabel: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        showCurrency()
     }
-
-
+    
+    
+    func showCurrency() {
+        NetworkManager.shared.loadCurrency(completion: {CurrencyModel in
+             DispatchQueue.main.async {
+                self.lastUpdateLabel.text = "last update: \(CurrencyModel!.date)"
+                self.usdCurrencyLabel.text = String(CurrencyModel!.rates.USD)
+                self.bynCurrencyLabel.text = String(CurrencyModel!.rates.BYN)
+                self.rubCurrencyLabel.text = String(CurrencyModel!.rates.RUB)
+            }
+        })
+    }
+    
+    
+    @IBAction func updateButtonDidClick(_ sender: Any) {
+        showCurrency()
+    }
+    
 }
-
